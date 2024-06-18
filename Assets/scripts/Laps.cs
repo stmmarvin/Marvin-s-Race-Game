@@ -11,18 +11,28 @@ public class Laps : MonoBehaviour
     public int laps = 0;
     public int maxLaps = 3;
     public GameObject FinishLine;
+    public GameObject Ground_Road;
     public TextMeshProUGUI Lap_Text;
     public PlayController playController;
     public AudioClip FinishSound;
     public List<GameObject> targetPrefabs;
     private AudioSource audioSource;
-    void Start()
+    private bool lap2TextVisible = false;
+    private float lap2TextDuration = 2f;
+    private float lap2TextTimer = 0f;
+
+    private void Start()
     {
-     audioSource = GetComponent<AudioSource>();
-      Lap_Text.gameObject.SetActive(false);
-
+        if (FinishLine != null)
+        {
+            Debug.Log("FinishLine prefab is correctly connected.");
+        }
+        else
+        {
+            Debug.Log("FinishLine prefab is not connected.");
+        }
+        Lap_Text.gameObject.SetActive(false);
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,6 +43,8 @@ public class Laps : MonoBehaviour
             if (laps == 2)
             {
                 Lap_Text.text = "Lap 2/" + maxLaps;
+                lap2TextVisible = true;
+                lap2TextTimer = lap2TextDuration;
             }
             else
             {
@@ -49,7 +61,6 @@ public class Laps : MonoBehaviour
         }
     }
 
-
     private void GameOver()
     {
         // Code for game over logic goes here
@@ -60,16 +71,24 @@ public class Laps : MonoBehaviour
         playController.playerAudio.Stop();
         playController.playerAudio.clip = playController.GameoverSound;
         playController.playerAudio.Play();
-        
     }
+
     // Update is called once per frame
     void Update()
     {
-       
         if (laps > 0)
         {
             FinishLine.SetActive(true);
-  
+        }
+
+        if (lap2TextVisible)
+        {
+            lap2TextTimer -= Time.deltaTime;
+            if (lap2TextTimer <= 0f)
+            {
+                Lap_Text.gameObject.SetActive(false);
+                lap2TextVisible = false;
+            }
         }
     }
 }

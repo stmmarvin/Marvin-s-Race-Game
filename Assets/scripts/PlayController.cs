@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class PlayController : MonoBehaviour
 {
     public TextMeshProUGUI gameOverText;
-    public TextMeshProUGUI TimerText;
+    public TextMeshProUGUI TimerText; 
     public Button restartButton;
     public List<GameObject> targetPrefabs;
     public float timer;
